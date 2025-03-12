@@ -9,3 +9,5 @@ as rotas são (
 /veiculo
 )
 carro, fipe e veiculo tem metodo GET  /rota/{id}.
+
+clone depois pode fazer build docker e up.
