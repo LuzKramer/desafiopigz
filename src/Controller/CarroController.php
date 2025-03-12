@@ -34,6 +34,26 @@ final class CarroController extends AbstractController
 
         return new JsonResponse($data);
     }
+
+    #[Route('/carro/{id}', name: 'app_carro_show', methods: ['GET'])]
+    public function show(int $id, EntityManagerInterface $em): JsonResponse{
+        $carro = $em->getRepository(Carro::class)->findOneBy(['id' => $id]);
+        if($carro === null) {
+            return $this->json(['error' => 'Carro nao encontrado'], 404);
+        }
+        return $this->json([
+            'id' => $carro->getId(),
+            'fabricante' => $carro->getFabricante(),
+            'modelo' => $carro->getModelo(),
+            'ano' => $carro->getAno(),
+            'version' => $carro->getVersion(),
+            'combustivel' => $carro->getCombustivel(),
+        ]);
+    }
+
+
+
+
     #[Route('/carro', methods: ['POST'], name: 'app_carro_create')]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
