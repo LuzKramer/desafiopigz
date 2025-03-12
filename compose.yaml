@@ -24,12 +24,7 @@ services:
             - app-network
         depends_on:
             - mysql
-        command: >
-            sh -c "
-              composer install &&
-              php bin/console doctrine:database:create --if-not-exists &&
-              php bin/console doctrine:migrations:migrate --no-interaction
-            "
+        
 
     mysql:
         image: mysql:8.0
