@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	file \
 	gettext \
 	git \
+    default-mysql-client \
+    && docker-php-ext-install pdo pdo_mysql \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -39,6 +41,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ###> recipes ###
+###> doctrine/doctrine-bundle ###
+RUN install-php-extensions pdo_pgsql
+###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
@@ -64,7 +69,7 @@ RUN set -eux; \
 
 COPY --link frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
 
-CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
+CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile",  ":8080" ]
 
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
